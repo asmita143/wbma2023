@@ -1,4 +1,3 @@
-import {StatusBar} from 'expo-status-bar';
 import PropTypes from 'prop-types';
 import { Image, StyleSheet, TouchableOpacity, View,Text,} from 'react-native';
 

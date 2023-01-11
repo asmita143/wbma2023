@@ -17,7 +17,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#d8d8d8',
     alignItems: 'center',
     justifyContent: 'center',
   },
