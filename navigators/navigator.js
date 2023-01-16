@@ -24,7 +24,7 @@ const TabScreen=()=>{
           }else if (route.name==='Profile'){
             iconName = 'person'
           }
-          return <Ionicons name={iconName} size/>;
+          return <Ionicons name={iconName} size='30'/>;
         }
       }
     }}>
