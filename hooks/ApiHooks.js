@@ -1,8 +1,19 @@
 import {baseUrl} from '../utils/variables';
 import {useEffect, useState} from 'react';
 
+const doFetch = async (url, options) => {
+  const response = await fetch(url, options);
+  const json = await response.json();
+  if (!response.ok) {
+    const message = json.error
+      ? `${json.message}: ${json.error}`
+      : json.message;
+    throw new Error(message || response.statusText);
+  }
 
-const useMedia=() =>{
+  return json;
+};
+const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
 
   const loadMedia = async () => {
@@ -10,10 +21,11 @@ const useMedia=() =>{
       const response = await fetch(baseUrl + 'media');
       const json = await response.json();
       const media = await Promise.all(
-        json.map(async (file)=>{
-        const fileResponse = await fetch(baseUrl + 'media/' + file.file_id);
-        return await fileResponse.json();
-      }));
+        json.map(async (file) => {
+          const fileResponse = await fetch(baseUrl + 'media/' + file.file_id);
+          return await fileResponse.json();
+        })
+      );
       setMediaArray(media);
     } catch (error) {
       console.log('List, MediaArray ', error);
@@ -24,5 +36,39 @@ const useMedia=() =>{
     loadMedia();
   }, []);
   return {mediaArray};
-}
-export {useMedia};
+};
+const useAuthentication = () => {
+  const postLogin = async (userCredentials) => {
+    const options = {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userCredentials),
+    };
+    try {
+      return await doFetch(baseUrl + 'login', options);
+    } catch (error) {
+      throw new Error('postLogin: ' + error.message);
+    }
+  };
+  return {postLogin};
+};
+//
+const useUser = () => {
+  const getUserByToken = async (token) => {
+    const options = {
+      method: 'GET',
+      headers: {'x-access-token': token},
+    };
+    try {
+      return await doFetch(baseUrl + 'users/user', options);
+    } catch (error) {
+      throw new Error('CheckUser: ' + error.message);
+    }
+  };
+
+  return {getUserByToken};
+};
+
+export {useMedia, useAuthentication, useUser};
