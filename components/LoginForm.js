@@ -1,5 +1,4 @@
 import React ,{useContext}from 'react';
-import PropTypes from 'prop-types';
 import { MainContext } from '../contexts/MainContext';
 import {useAuthentication} from '../hooks/ApiHooks';
 import {Button, TextInput, Text, View} from 'react-native';
@@ -7,7 +6,7 @@ import {Controller, useForm} from 'react-hook-form';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginForm=(props)=>{
-  const {setIsLoggedIn}=useContext(MainContext);
+  const {setIsLoggedIn,setUser}=useContext(MainContext);
   const{postLogin}=useAuthentication();
   const{control,handleSubmit,formState:{errors}}=useForm({
     defaultValues:{username: '',password:''},
@@ -21,13 +20,14 @@ const LoginForm=(props)=>{
       const loginResult=await postLogin(loginData);
       console.log('logIn',loginResult)
       await AsyncStorage.setItem('userToken', loginResult.token);
+      setUser(loginResult.user);
       setIsLoggedIn(true);
     } catch (error) {
       console.error('logIn', error);
     }
   };
     return (
-      <View>
+      <View >
         <Text>Login Form</Text>
         <Controller
         control={control}
@@ -62,12 +62,10 @@ const LoginForm=(props)=>{
         )}
         name="password"
         />
-        {errors.password &&<Text>Password(min.5 chars)is not valid!</Text>}
+        {errors.password &&<Text>Password(min.5 chars)is required!</Text>}
        <Button title='Sign in!' onPress={handleSubmit(logIn)}/>
       </View>
     );
 };
-
-LoginForm.propTypes={};
 
 export default LoginForm;
