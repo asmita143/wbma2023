@@ -1,26 +1,50 @@
 import React, {useContext} from 'react';
-import {StyleSheet, SafeAreaView, Text, Button} from 'react-native';
+import {StyleSheet, SafeAreaView, Text, Button,Image} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {uploadsUrl} from '../utils/variables';
+import { useTag } from '../hooks/ApiHooks';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Profile = () => {
-  const {setIsLoggedIn, user,setUser}=useContext(MainContext);
+  const {getFilesByTag} = useTag();
+  const {setIsLoggedIn, user, setUser} = useContext(MainContext);
+  const [avatar, setAvatar] = useState('');
+
+  const loadAvatar = async () => {
+    try {
+      const avatarArray = await getFilesByTag('avatar_' + user.user_id);
+      setAvatar(avatarArray.pop().filename);
+      console.log('user avatar', avatar);
+    } catch (error) {
+      console.error('user avatar fetch failed', error.message);
+    }
+  };
+  useEffect(() => {
+    loadAvatar();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Text>Profile</Text>
+      <Image style={styles.image} source={{uri: uploadsUrl + avatar}} />
       <Text>username:{user.username}</Text>
       <Text>Email:{user.email}</Text>
       <Text>Full name:{user.full_name}</Text>
-      <Button title="Logout!" onPress={async()=>{
-        setUser({});
-        setIsLoggedIn(false);
-        try {
-          await AsyncStorage.clear();
-        } catch (error) {
-          console.error('Clearing asyncstorage failed',error)
-        }
-      }}  />
-      </SafeAreaView>
+      <Button
+        title="Logout!"
+        onPress={async () => {
+          setUser({});
+          setIsLoggedIn(false);
+          try {
+            await AsyncStorage.clear();
+          } catch (error) {
+            console.error('Clearing asyncstorage failed', error);
+          }
+        }}
+      />
+    </SafeAreaView>
   );
 };
 
@@ -32,6 +56,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 40,
   },
+  image:{
+    width:'100%',
+    height:300,
+  }
 });
 
 export default Profile;
