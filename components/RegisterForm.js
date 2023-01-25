@@ -1,6 +1,6 @@
 import React from 'react';
 import {useUser} from '../hooks/ApiHooks';
-import { TextInput, Text,} from 'react-native';
+import { Text,} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import { Input,Button} from '@rneui/themed';
 
@@ -34,7 +34,7 @@ const RegisterForm = () => {
   }
   return (
     <>
-      <Text>Register</Text>
+      <Text >Register</Text>
       <Controller
         control={control}
         rules={{required: true, minLength: 3}}
@@ -74,7 +74,7 @@ const RegisterForm = () => {
         control={control}
         rules={{required: true, minLength: 3}}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="email"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -88,7 +88,7 @@ const RegisterForm = () => {
         control={control}
         rules={{minLength: 3}}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Full name"
             onBlur={onBlur}
             onChangeText={onChange}
