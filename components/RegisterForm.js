@@ -61,7 +61,7 @@ const RegisterForm=()=>{
         {errors.password &&<Text>Password(min.5 chars)is not valid!</Text>}
         <Controller
         control={control}
-        rules={{required:true, minLength:3}}
+        rules={{required:true, minLength:3, validate:checkUser}}
         render={(
           { field:{onChange,onBlur,value}}
         )=>(
