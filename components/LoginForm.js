@@ -1,9 +1,10 @@
 import React ,{useContext}from 'react';
 import { MainContext } from '../contexts/MainContext';
 import {useAuthentication} from '../hooks/ApiHooks';
-import {Button, TextInput, Text, View} from 'react-native';
+import { View} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Input, Icon,Button,Text } from '@rneui/themed';
 
 const LoginForm=(props)=>{
   const {setIsLoggedIn,setUser}=useContext(MainContext);
@@ -27,15 +28,15 @@ const LoginForm=(props)=>{
     }
   };
     return (
-      <View >
-        <Text>Login Form</Text>
+      <>
+        <Text >Login</Text>
         <Controller
         control={control}
         rules={{required:true, minLength:3}}
         render={(
           { field:{onChange,onBlur,value}}
         )=>(
-          <TextInput
+          <Input
           placeholder='username'
           onBlur={onBlur}
           onChangeText={onChange}
@@ -52,7 +53,7 @@ const LoginForm=(props)=>{
         render={(
           { field:{onChange,onBlur,value}}
         )=>(
-          <TextInput
+          <Input
           placeholder='Password'
           onBlur={onBlur}
           onChangeText={onChange}
@@ -63,8 +64,17 @@ const LoginForm=(props)=>{
         name="password"
         />
         {errors.password &&<Text>Password(min.5 chars)is required!</Text>}
-       <Button title='Sign in!' onPress={handleSubmit(logIn)}/>
-      </View>
+       <Button
+       title='Sign in!'
+       buttonStyle={{ backgroundColor: 'rgba(39, 39, 39, 1)' }}
+              containerStyle={{
+                width: "100%",
+                marginHorizontal: 50,
+                marginVertical: 10,
+              }}
+              titleStyle={{ color: 'white', marginHorizontal: 20 }}
+              onPress={handleSubmit(logIn)}/>
+       </>
     );
 };
 
