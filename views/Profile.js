@@ -33,6 +33,12 @@ const Profile = () => {
       <Text>Email:{user.email}</Text>
       <Text>Full name:{user.full_name}</Text>
       <Button
+             onPress=
+            {() => {
+              navigation.navigate('EditProfile', item);
+            }}>View
+          </Button>
+      <Button
         title="Logout!"
         onPress={async () => {
           setUser({});
