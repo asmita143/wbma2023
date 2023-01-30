@@ -1,5 +1,7 @@
 import {baseUrl} from '../utils/variables';
-import {useEffect, useState} from 'react';
+import {useEffect, useState,useContext} from 'react';
+import {MainContext} from '../contexts/MainContext';
+
 
 const doFetch = async (url, options) => {
   const response = await fetch(url, options);
@@ -15,6 +17,8 @@ const doFetch = async (url, options) => {
 };
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const {update} = useContext(MainContext);
+
 
   const loadMedia = async () => {
     try {
@@ -34,7 +38,24 @@ const useMedia = () => {
 
   useEffect(() => {
     loadMedia();
-  }, []);
+
+  }, [update]);
+
+  const postMedia = async(fileData, token)=>{
+    const options = {
+      method: 'post',
+      headers: {
+        'x-access-token':token,
+        'Content-Type': 'multipart/form-data',
+      },
+      body: fileData,
+    };
+    try {
+      return await doFetch(baseUrl + 'media', options);
+    } catch (error) {
+      throw new Error('postUpload: ' + error.message);
+    }
+  }
   return {mediaArray};
 };
 const useAuthentication = () => {
