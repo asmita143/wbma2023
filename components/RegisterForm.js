@@ -36,7 +36,7 @@ const RegisterForm=()=>{
 
   };
     return (
-      <Card >
+      < >
         <Text>Register Form</Text>
         <Controller
         control={control}
@@ -151,7 +151,7 @@ const RegisterForm=()=>{
         {errors.full_name?.type === 'minLength' && <Text>min length is 3 characters</Text>}
 
        <Button title='Register now!' onPress={handleSubmit(register)}/>
-      </Card>
+      </>
     );
 };
 
