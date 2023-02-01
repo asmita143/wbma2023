@@ -26,12 +26,11 @@ const Upload = ({navigation}) => {
     control,
     handleSubmit,
     trigger,
-    setValue,
     reset,
     formState: {errors},
   } = useForm({
     defaultValues: {title: '', description: ''},
-    mode: 'onBlur',
+    mode: 'onChange',
   });
 
   const uploadFile = async (data) => {
@@ -73,7 +72,6 @@ const Upload = ({navigation}) => {
       ]);
     } catch (error) {
       console.error('file upload failed', error);
-      setLoading(false);
     } finally {
       setLoading(false);
     }

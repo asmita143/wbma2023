@@ -12,7 +12,7 @@ const Single = ({route}) => {
       <View style={styles.titleView}>
       <Text style={styles.title}>{title}</Text>
       </View>
-      <Text>{timeAdded}</Text>
+      <Text>uploaded at :{new Date(timeAdded).toLocaleString('fi-FI')}</Text>
       <Text>{description}</Text>
 
     </SafeAreaView>

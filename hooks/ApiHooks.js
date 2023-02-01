@@ -24,7 +24,7 @@ const useMedia = () => {
     try {
       //const response = await fetch(baseUrl + 'media');
       //const json = await response.json();
-      const json= await useTag.getFilesByTag(-appId);
+      const json= await useTag().getFilesByTag(appId);
       const media = await Promise.all(
         json.map(async (file) => {
           const fileResponse = await fetch(baseUrl + 'media/' + file.file_id);
