@@ -15,6 +15,7 @@ const Single = ({route}) => {
       <Text>uploaded at :{new Date(timeAdded).toLocaleString('fi-FI')}</Text>
       <Text>{description}</Text>
 
+
     </SafeAreaView>
   );
 };
