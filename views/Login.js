@@ -1,12 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, Keyboard, KeyboardAvoidingView, TouchableOpacity, View, Platform} from 'react-native';
+import {Button, Card, Text} from '@rneui/base';
+import {Keyboard, ScrollView, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 import { useUser } from '../hooks/ApiHooks';
-import {Button, Text} from '@rneui/base'
+
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn,setUser}=useContext(MainContext);
@@ -30,18 +31,14 @@ const Login = ({navigation}) => {
   },[]);
 
   return (
-    <TouchableOpacity
-    onPress={()=>Keyboard.dismiss()}
-    style={{flex:1}}
-    activeOpacity={1}>
-    <KeyboardAvoidingView
-    behaviour={Platform.OS === 'ios'? 'padding' : 'height'}
-     style={styles.container}>
-       {toggleForm ? <LoginForm /> : <RegisterForm />}
+    <ScrollView>
+    <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
+      {toggleForm ? <LoginForm /> : <RegisterForm />}
+      <Card>
         <Text>
           {toggleForm
             ? 'No account yet? Please register.'
-            : 'Already have an accoung? Please login.'}
+            : 'Already have an account? Please login.'}
         </Text>
         <Button
           type="outline"
@@ -50,22 +47,12 @@ const Login = ({navigation}) => {
             setToggleForm(!toggleForm);
           }}
         />
-    </KeyboardAvoidingView>
+      </Card>
     </TouchableOpacity>
+  </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logInButton:{
-    backgroundColor:'blue',
-  }
-});
 
 Login.propTypes = {
   navigation: PropTypes.object,

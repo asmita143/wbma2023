@@ -1,7 +1,7 @@
 import React ,{useContext}from 'react';
 import { MainContext } from '../contexts/MainContext';
 import {useAuthentication} from '../hooks/ApiHooks';
-import {Button, TextInput, Text, View} from 'react-native';
+import {Button, Input, Card} from '@rneui/themed'
 import {Controller, useForm} from 'react-hook-form';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,44 +27,40 @@ const LoginForm=(props)=>{
     }
   };
     return (
-      <View >
-        <Text>Login Form</Text>
-        <Controller
+      <Card>
+      <Card.Title>Login Form</Card.Title>
+      <Controller
         control={control}
-        rules={{required:{value: true, message:'is required'}}}
-        render={(
-          { field:{onChange,onBlur,value}}
-        )=>(
-          <TextInput
-          placeholder='username'
-          onBlur={onBlur}
-          onChangeText={onChange}
-          value={value}
-          errorMessage={errors.username && errors.username.message}
+        rules={{required: {value: true, message: 'is required'}}}
+        render={({field: {onChange, onBlur, value}}) => (
+          <Input
+            placeholder="Username"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            errorMessage={errors.username && errors.username.message}
+            autoCapitalize="none"
           />
         )}
         name="username"
-        />
-
-        <Controller
+      />
+      <Controller
         control={control}
-        rules={{required:{value:true,message:'is required'}}}
-        render={(
-          { field:{onChange,onBlur,value}}
-        )=>(
-          <TextInput
-          placeholder='Password'
-          onBlur={onBlur}
-          onChangeText={onChange}
-          value={value}
-          secureTextEntry={true}
-          errorMessage={errors.password && errors.password.message}
+        rules={{required: {value: true, message: 'is required'}}}
+        render={({field: {onChange, onBlur, value}}) => (
+          <Input
+            placeholder="Password"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            secureTextEntry={true}
+            errorMessage={errors.password && errors.password.message}
           />
         )}
         name="password"
-        />
-       <Button title='Sign in!' onPress={handleSubmit(logIn)}/>
-      </View>
+      />
+      <Button title="Sign in!" onPress={handleSubmit(logIn)} />
+    </Card>
     );
 };
 

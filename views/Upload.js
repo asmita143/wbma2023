@@ -1,23 +1,19 @@
 import {Button, Card, Input} from '@rneui/themed';
 import PropTypes from 'prop-types';
 import {Controller, useForm} from 'react-hook-form';
-import {
-  ActivityIndicator,
-  Keyboard,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import {Keyboard, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import {useState, useContext, useCallback} from 'react';
+import {useState, useContext, useCallback, useRef} from 'react';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
 import {useFocusEffect} from '@react-navigation/native';
 import {appId} from '../utils/variables';
+import {Video} from 'expo-av';
 
 const Upload = ({navigation}) => {
   const [mediafile, setMediaFile] = useState({});
+  const video = useRef(null);
   const [loading, setLoading] = useState(false);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
@@ -112,10 +108,25 @@ const Upload = ({navigation}) => {
     <ScrollView>
       <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
         <Card>
-          <Card.Image
-            source={{uri: mediafile.uri || 'https://placekitten.com/200/300'}}
-            onPress={pickFile}
-          />
+          {mediafile.type === 'video' ? (
+            <Video
+              ref={video}
+              source={{uri: mediafile.uri}}
+              style={{width: '100%', height: 200}}
+              resizeMode="cover"
+              useNativeControls
+              onError={(error) => {
+                console.log(error);
+              }}
+            />
+          ) : (
+            <Card.Image
+              source={{
+                uri: mediafile.uri || 'https://placekitten.com/g/200/300',
+              }}
+              onPress={pickFile}
+            />
+          )}
           <Controller
             control={control}
             rules={{
@@ -159,14 +170,41 @@ const Upload = ({navigation}) => {
             name="description"
           />
 
-          <Button title="Pick a File" onPress={pickFile} />
+          <Button
+            title="Pick a File"
+            buttonStyle={{backgroundColor: 'rgba(39, 39, 39, 1)'}}
+            containerStyle={{
+              width: 200,
+              marginHorizontal: 50,
+              marginVertical: 10,
+            }}
+            titleStyle={{color: 'white', marginHorizontal: 20}}
+            onPress={pickFile}
+          />
           <Button
             disabled={!mediafile.uri || errors.title || errors.description}
             title="Upload"
+            buttonStyle={{backgroundColor: 'rgba(39, 39, 39, 1)'}}
+            containerStyle={{
+              width: 200,
+              marginHorizontal: 50,
+              marginVertical: 10,
+            }}
+            titleStyle={{color: 'white', marginHorizontal: 20}}
             onPress={handleSubmit(uploadFile)}
           />
-          <Button title={'Reset'} onPress={resetForm} type="outline"></Button>
-          {loading && <ActivityIndicator size="large"></ActivityIndicator>}
+          <Button
+            title={'Reset'}
+            buttonStyle={{backgroundColor: 'rgba(39, 39, 39, 1)'}}
+            containerStyle={{
+              width: 200,
+              marginHorizontal: 50,
+              marginVertical: 10,
+            }}
+            titleStyle={{color: 'white', marginHorizontal: 20}}
+            onPress={resetForm}
+            type="outline"
+          ></Button>
         </Card>
       </TouchableOpacity>
     </ScrollView>

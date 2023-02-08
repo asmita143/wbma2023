@@ -1,11 +1,11 @@
 
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, } from 'react-native';
 import ListItem from './ListItem';
 import { useMedia } from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
 
-const List = ({navigation}) => {
-  const {mediaArray} = useMedia();
+const List = ({navigation,myFilesOnly= false}) => {
+  const {mediaArray} = useMedia(myFilesOnly);
   return (
     <FlatList
       data={mediaArray}
@@ -17,6 +17,7 @@ const List = ({navigation}) => {
   );
 };
 List.propTypes ={
-  navigation: PropTypes.object,
+  navigation: PropTypes.object.isRequired,
+  myFilesOnly:PropTypes.bool,
 }
 export default List;
